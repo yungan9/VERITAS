@@ -35,8 +35,27 @@
         };
     });
 
-    console.log(`✅ ${data.length}개의 리뷰 데이터를 수집했습니다.`);
+    console.log(`${data.length}개의 리뷰 데이터를 수집했습니다.`);
     console.log(data);
 
-
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/analyze-reviews`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then((res) => res.json())
+        .then((result) => {
+            if (result.results) {
+                console.log('분석 결과:', result.results);
+            } else if (result.error) {
+                console.error('분석 실패:', result.error.code, result.error.message);
+            } else {
+                console.warn('예외:', result);
+            }
+        })
+        .catch((err) => {
+            console.error('네트워크 또는 서버 오류:', err);
+        });
 })();
