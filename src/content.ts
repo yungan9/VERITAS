@@ -43,6 +43,43 @@
         .then((result) => {
             if (result.results) {
                 console.log('분석 결과:', result.results);
+
+                result.results.forEach(({ reviewId, isAiGenerated }: { reviewId: string; isAiGenerated: boolean }) => {
+                    if (!isAiGenerated) return;
+
+                    const helpDiv = document.querySelector(
+                        `.sdp-review__article__list__help.js_reviewArticleHelpfulContainer[data-review-id="${reviewId}"]`
+                    );
+                    if (!helpDiv) return;
+
+                    const article = helpDiv.closest('article.sdp-review__article__list.js_reviewArticleReviewList');
+                    if (!article) return;
+
+                    const infoDiv = article.querySelector('.sdp-review__article__list__info');
+                    if (!infoDiv) return;
+
+                    if (article.querySelector('.ai-review-result-tag')) return;
+
+                    const resultTag = document.createElement('div');
+                    resultTag.className = 'ai-review-result-tag';
+                    resultTag.textContent = '🤖 AI 생성 가능성이 있는 리뷰입니다';
+
+                    resultTag.style.cssText = `
+                        background-color: #ffe5e5;
+                        color: #d40000;
+                        border: 1px solid #ffaaaa;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        font-weight: 600;
+                        padding: 6px 12px;
+                        margin-bottom: 6px;
+                        text-align: right;
+                        display: flex;
+                        justify-content: flex-end;
+                      `;
+
+                    infoDiv.parentElement?.insertBefore(resultTag, infoDiv);
+                });
             } else if (result.error) {
                 console.error('분석 실패:', result.error.code, result.error.message);
             } else {
