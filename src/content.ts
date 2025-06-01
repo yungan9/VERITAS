@@ -1,13 +1,7 @@
 (() => {
     console.log('content script 실행');
 
-    const container = document.querySelector('div.review-article-container');
-    if (!container) {
-        console.log('div.review-article-container 탐색 오류');
-        return;
-    }
-
-    const articles = container.querySelectorAll('article.sdp-review__article__list.js_reviewArticleReviewList');
+    const articles = document.querySelectorAll('article.sdp-review__article__list.js_reviewArticleReviewList');
     if (articles.length === 0) {
         console.log('article 탐색 오류');
         return;
