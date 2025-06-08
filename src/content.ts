@@ -1,6 +1,9 @@
 (() => {
     console.log('content script 실행');
 
+    const sensitivity = window.sensitivity || 'medium';
+
+
     const articles = document.querySelectorAll('article.sdp-review__article__list.js_reviewArticleReviewList');
     if (articles.length === 0) {
         console.log('article 탐색 오류');
@@ -31,13 +34,18 @@
 
     console.log(`${data.length}개의 리뷰 데이터를 수집했습니다.`);
     console.log(data);
+    console.log('민감도:', sensitivity);
 
     fetch(`${import.meta.env.VITE_API_BASE_URL}/analyze-reviews`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+            sensitivity: window.sensitivity ?? 'medium',
+            data,
+        }),
+
     })
         .then((res) => res.json())
         .then((result) => {
@@ -62,7 +70,7 @@
 
                     const resultTag = document.createElement('div');
                     resultTag.className = 'ai-review-result-tag';
-                    resultTag.textContent = '🤖 AI 생성 가능성이 있는 리뷰입니다';
+                    resultTag.textContent = 'AI 생성 가능성이 있는 리뷰입니다';
 
                     resultTag.style.cssText = `
                         background-color: #ffe5e5;
