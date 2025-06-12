@@ -70,7 +70,7 @@
 
                     const resultTag = document.createElement('div');
                     resultTag.className = 'ai-review-result-tag';
-                    resultTag.textContent = 'AI 생성 가능성이 있는 리뷰입니다';
+                    resultTag.textContent = '🚩 이 리뷰는 가짜 리뷰로 표시되었습니다.';
 
                     resultTag.style.cssText = `
                         background-color: #ffe5e5;
